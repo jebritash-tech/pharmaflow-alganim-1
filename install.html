@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>نظام إدارة الصيدلية - PharmaFlow</title>
+
+    
+
+    <meta name="theme-color" content="#2563eb">
+
+    <link
+    rel="icon"
+    type="image/png"
+    href="./icons/icon-192.png"
+    >
+    <meta
+        name="theme-color"
+        content="#2563eb">
+    <link
+        rel="manifest"
+        href="./manifest.json"
+    >
+
+    
+<script
+        type="module"
+        src="./src/js/pages/install.js"
+    ></script>
+    
+</head>
+
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-6">
+
+<div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+
+    <div class="bg-blue-600 text-white p-8 text-center">
+
+        <div class="text-5xl mb-4">
+            💊
+        </div>
+
+        <h1 class="text-3xl font-bold">
+            نظام إدارة الصيدلية
+        </h1>
+
+        <p class="mt-3 text-blue-100">
+            منصة متكاملة لإدارة المبيعات والمشتريات والمخزون والتحليلات
+        </p>
+
+    </div>
+
+    <div class="p-8">
+
+        <h2 class="text-xl font-bold text-gray-800 mb-6">
+            لماذا تثبت النظام على جهازك؟
+        </h2>
+
+        <div class="space-y-4 mb-8">
+
+            <div class="flex items-center gap-3">
+                <span class="text-green-600 text-xl">✓</span>
+                <span class="text-gray-700">
+                    يعمل بدون متصفح ويظهر كتطبيق مستقل
+                </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="text-green-600 text-xl">✓</span>
+                <span class="text-gray-700">
+                    سريع في التشغيل والتنقل بين الصفحات
+                </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="text-green-600 text-xl">✓</span>
+                <span class="text-gray-700">
+                    قابل للتثبيت على سطح المكتب بنقرة واحدة
+                </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="text-green-600 text-xl">✓</span>
+                <span class="text-gray-700">
+                    يدعم العمل عند ضعف أو انقطاع الإنترنت جزئياً
+                </span>
+            </div>
+
+        </div>
+
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-8">
+
+            <p class="text-sm text-blue-900">
+
+                بعد التثبيت سيظهر النظام كبرنامج مستقل داخل نظام التشغيل،
+                ويمكن تشغيله مباشرة من سطح المكتب دون الحاجة لفتح المتصفح
+                أو كتابة أي روابط.
+
+            </p>
+
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-3">
+
+            <button
+                id="installAppBtn"
+                onclick="installPWA()"
+                class="bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition">
+                تثبيت النظام
+            </button>
+                <div
+                id="installSuccess"
+                class="hidden bg-green-50 border border-green-200 text-green-700 rounded-xl p-4 text-center">
+
+                ✓ تم تثبيت النظام بنجاح
+
+                <div class="text-sm mt-2">
+
+                    يمكنك الآن تشغيل النظام مباشرة من سطح المكتب.
+
+                </div>
+
+            </div>
+            <a
+                href="login.html"
+                class="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold text-center transition">
+
+                بدء الاستخدام
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

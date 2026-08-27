@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        مركز ذكاء الصيدلية - PharmaFlow
+    </title>
+
+    <link
+        rel="manifest"
+        href="./manifest.json"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icons/icon-192.png"
+    >
+
+    <meta
+        name="theme-color"
+        content="#2563eb"
+    >
+
+    <style>
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-slate-100">
+
+<div id="app">
+
+    <div class="max-w-7xl mx-auto p-6">
+
+        <!-- Header -->
+
+        <div
+            class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4"
+        >
+
+            <div>
+
+                <h1 class="text-3xl font-bold">
+                    مركز ذكاء الصيدلية
+                </h1>
+
+                <p class="text-gray-500 mt-2">
+                    لوحة تحليلات وإدارة القرار
+                </p>
+
+            </div>
+
+
+            <div class="flex items-center gap-3">
+
+                <select
+                    v-model="selectedBranch"
+                    @change="loadDashboard"
+                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+
+                    <option value="all">
+                        كل الفروع
+                    </option>
+
+                    <option
+                        v-for="branch in branches"
+                        :key="branch.id"
+                        :value="branch.id"
+                    >
+                        {{ branch.name }}
+                    </option>
+
+                </select>
+
+
+                <button
+                    @click="loadDashboard"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                    تحديث
+                </button>
+
+
+                <a
+                    href="admin.html"
+                    class="bg-slate-600 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition"
+                >
+                    رجوع
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Loading -->
+
+        <div
+            v-if="loading"
+            class="bg-white p-10 rounded-xl shadow text-center"
+        >
+
+            جاري تحميل البيانات...
+
+        </div>
+
+
+        <template v-if="dashboard">
+
+            <!-- Daily Action Center -->
+
+            <section class="mb-8">
+
+                <h2 class="text-xl font-bold mb-4">
+                    مركز القرارات اليومية
+                </h2>
+
+
+                <div class="grid lg:grid-cols-4 gap-4">
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-2">
+                            أصناف منخفضة المخزون
+                        </h3>
+
+                        <div class="text-3xl font-bold text-red-600">
+
+                            {{ dashboard.inventory.low_stock }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-2">
+                            قرب انتهاء الصلاحية
+                        </h3>
+
+                        <div class="text-3xl font-bold text-orange-600">
+
+                            {{ dashboard.inventory.expiring_soon }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-2">
+                            Inventory Health
+                        </h3>
+
+                        <div class="text-3xl font-bold text-green-600">
+
+                            {{ dashboard.inventory.health_score }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-red-50 border border-red-300 rounded-xl p-4"
+                    >
+
+                        <h3 class="font-bold text-red-700">
+                            رأس المال المجمد
+                        </h3>
+
+                        <div class="text-3xl font-bold mt-3">
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.frozen_capital
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- KPIs -->
+
+            <section class="mb-8">
+
+                <h2 class="text-xl font-bold mb-4">
+                    المؤشرات الرئيسية
+                </h2>
+
+
+                <div
+                    class="grid md:grid-cols-3 lg:grid-cols-4 gap-4"
+                >
+
+                    <div class="bg-white rounded-xl shadow p-4">
+
+                        <div class="text-gray-500">
+                            مبيعات اليوم
+                        </div>
+
+                        <div class="text-2xl font-bold mt-2">
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.today_sales
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-white rounded-xl shadow p-4">
+
+                        <div class="text-gray-500">
+                            ربح اليوم
+                        </div>
+
+                        <div class="text-2xl font-bold mt-2">
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.today_profit
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4 border-r-4 border-purple-500"
+                    >
+
+                        <div class="text-gray-500">
+                            مبيعات الأسبوع
+                        </div>
+
+                        <div
+                            class="text-2xl font-bold mt-2 text-purple-600"
+                        >
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.weekly_sales || 0
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4 border-r-4 border-indigo-500"
+                    >
+
+                        <div class="text-gray-500">
+                            أرباح الأسبوع
+                        </div>
+
+                        <div
+                            class="text-2xl font-bold mt-2 text-indigo-600"
+                        >
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.weekly_revenue
+                                    ||
+                                    dashboard.kpis.weekly_profit
+                                    ||
+                                    0
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4 border-r-4 border-blue-500"
+                    >
+
+                        <div class="text-gray-500">
+                            مبيعات الشهر
+                        </div>
+
+                        <div
+                            class="text-2xl font-bold mt-2 text-blue-600"
+                        >
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.monthly_sales || 0
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4 border-r-4 border-emerald-500"
+                    >
+
+                        <div class="text-gray-500">
+                            أرباح الشهر
+                        </div>
+
+                        <div
+                            class="text-2xl font-bold mt-2 text-emerald-600"
+                        >
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.monthly_revenue
+                                    ||
+                                    dashboard.kpis.monthly_profit
+                                    ||
+                                    0
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-white rounded-xl shadow p-4">
+
+                        <div class="text-gray-500">
+                            الفواتير
+                        </div>
+
+                        <div class="text-2xl font-bold mt-2">
+
+                            {{ dashboard.kpis.today_invoices }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-white rounded-xl shadow p-4">
+
+                        <div class="text-gray-500">
+                            متوسط الفاتورة
+                        </div>
+
+                        <div class="text-2xl font-bold mt-2">
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.avg_invoice
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-white rounded-xl shadow p-4">
+
+                        <div class="text-gray-500">
+                            قيمة المخزون
+                        </div>
+
+                        <div class="text-2xl font-bold mt-2">
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.inventory_value
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-white rounded-xl shadow p-4">
+
+                        <div class="text-gray-500">
+                            رأس المال المجمد
+                        </div>
+
+                        <div
+                            class="text-2xl font-bold mt-2 text-red-600"
+                        >
+
+                            {{
+                                formatNumber(
+                                    dashboard.kpis.frozen_capital
+                                )
+                            }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Sales & Profit -->
+
+            <section class="mb-8">
+
+                <h2 class="text-xl font-bold mb-4">
+                    المبيعات والأرباح
+                </h2>
+
+
+                <div
+                    class="grid lg:grid-cols-2 gap-6"
+                >
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-4">
+                            المبيعات مقابل الربح
+                        </h3>
+
+                        <canvas
+                            id="salesProfitChart"
+                            height="120"
+                        ></canvas>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-4">
+                            النمو الشهري
+                        </h3>
+
+                        <canvas
+                            id="growthChart"
+                            height="120"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Inventory Intelligence -->
+
+            <section class="mb-8">
+
+                <h2 class="text-xl font-bold mb-4">
+                    مركز ذكاء المخزون
+                </h2>
+
+
+                <div
+                    class="grid lg:grid-cols-3 gap-6"
+                >
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-3">
+                            توزيع المخزون
+                        </h3>
+
+                        <canvas
+                            id="inventoryDistributionChart"
+                        ></canvas>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-3">
+                            تحليل الموردين
+                        </h3>
+
+                        <canvas
+                            id="supplierChart"
+                        ></canvas>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h3 class="font-bold mb-3">
+                            ساعات الذروة
+                        </h3>
+
+                        <canvas
+                            id="peakHoursChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Forecast -->
+
+            <section class="mb-8">
+
+                <h2 class="text-xl font-bold mb-4">
+                    التوقعات
+                </h2>
+
+                <div
+                    class="bg-white rounded-xl shadow p-4"
+                >
+
+                    <canvas
+                        id="forecastChart"
+                        height="120"
+                    ></canvas>
+
+                </div>
+
+            </section>
+
+
+            <!-- ABC Analysis -->
+
+            <section class="mb-8">
+
+                <h2 class="text-xl font-bold mb-4">
+                    تحليل ABC
+                </h2>
+
+
+                <div
+                    class="grid lg:grid-cols-2 gap-6"
+                >
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <canvas
+                            id="abcChart"
+                        ></canvas>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-6 flex flex-col justify-center"
+                    >
+
+                        <div class="mb-4">
+
+                            <span class="font-bold text-green-700">
+                                A
+                            </span>
+
+                            تمثل الأصناف الأعلى تأثيراً على الإيرادات.
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <span class="font-bold text-yellow-600">
+                                B
+                            </span>
+
+                            أصناف متوسطة التأثير.
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="font-bold text-red-600">
+                                C
+                            </span>
+
+                            أصناف ضعيفة التأثير.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Top Selling & Profit -->
+
+            <section class="mb-8">
+
+                <div
+                    class="grid lg:grid-cols-2 gap-6"
+                >
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h2 class="font-bold text-lg mb-4">
+                            الأدوية الأكثر مبيعاً
+                        </h2>
+
+
+                        <table class="w-full">
+
+                            <thead>
+
+                                <tr class="border-b">
+
+                                    <th class="text-right py-2">
+                                        الدواء
+                                    </th>
+
+                                    <th class="text-right py-2">
+                                        الكمية
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                <tr
+                                    v-for="item in dashboard.top_selling"
+                                    :key="item.name"
+                                    class="border-b"
+                                >
+
+                                    <td class="py-2">
+                                        {{ item.name }}
+                                    </td>
+
+                                    <td class="py-2">
+                                        {{ item.qty }}
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div
+                        class="bg-white rounded-xl shadow p-4"
+                    >
+
+                        <h2 class="font-bold text-lg mb-4">
+                            الأعلى ربحية
+                        </h2>
+
+
+                        <table class="w-full">
+
+                            <thead>
+
+                                <tr class="border-b">
+
+                                    <th class="text-right py-2">
+                                        الدواء
+                                    </th>
+
+                                    <th class="text-right py-2">
+                                        الربح
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                <tr
+                                    v-for="item in dashboard.top_profit_products"
+                                    :key="item.name"
+                                    class="border-b"
+                                >
+
+                                    <td class="py-2">
+                                        {{ item.name }}
+                                    </td>
+
+                                    <td class="py-2">
+                                        {{ formatNumber(item.profit) }}
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Purchase Plan -->
+
+            <section class="mb-8">
+
+                <div
+                    class="bg-white rounded-xl shadow p-4"
+                >
+
+                    <div
+                        class="flex justify-between items-center mb-4"
+                    >
+
+                        <h2 class="font-bold text-lg">
+                            خطة الشراء المقترحة (ERP Replenishment)
+                        </h2>
+
+                        <span class="text-sm text-gray-500">
+                            مبني على متوسط استهلاك 30 يوماً
+                        </span>
+
+                    </div>
+
+
+                    <table class="w-full text-sm">
+
+                        <thead>
+
+                            <tr
+                                class="border-b bg-slate-50 text-gray-700"
+                            >
+
+                                <th class="text-right py-3 px-2">
+                                    الصنف
+                                </th>
+
+                                <th class="text-right py-3 px-2">
+                                    معدل البيع اليومي
+                                </th>
+
+                                <th class="text-right py-3 px-2">
+                                    المخزون الحالي
+                                </th>
+
+                                <th class="text-right py-3 px-2">
+                                    يكفي لـ (أيام)
+                                </th>
+
+                                <th class="text-right py-3 px-2">
+                                    الطلب المقترح
+                                </th>
+
+                                <th class="text-center py-3 px-2">
+                                    حالة المخزون
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr
+                                v-for="item in dashboard.forecast"
+                                :key="item.name"
+                                class="border-b hover:bg-slate-50 transition"
+                            >
+
+                                <td class="py-3 px-2 font-medium">
+                                    {{ item.name }}
+                                </td>
+
+                                <td class="py-3 px-2">
+                                    {{ item.avg_daily_sales }} عبوة/يوم
+                                </td>
+
+                                <td class="py-3 px-2 font-bold">
+                                    {{ item.current_stock }} عبوة
+                                </td>
+
+                                <td class="py-3 px-2">
+                                    {{ item.days_cover }} يوم
+                                </td>
+
+                                <td
+                                    class="py-3 px-2 font-extrabold text-blue-600"
+                                >
+
+                                    {{
+                                        item.suggested_order > 0
+                                            ? item.suggested_order + ' عبوة'
+                                            : '—'
+                                    }}
+
+                                </td>
+
+                                <td
+                                    class="py-3 px-2 text-center"
+                                >
+
+                                    <span
+                                        :class="{
+                                            'bg-red-100 text-red-700 border-red-200':
+                                                item.status === 'critical',
+
+                                            'bg-amber-100 text-amber-700 border-amber-200':
+                                                item.status === 'warning',
+
+                                            'bg-emerald-100 text-emerald-700 border-emerald-200':
+                                                item.status === 'normal'
+                                        }"
+                                        class="px-3 py-1 rounded-full text-xs font-semibold border"
+                                    >
+
+                                        {{ item.status_label }}
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- Recent Sales -->
+
+            <section class="mb-8">
+
+                <div
+                    class="bg-white rounded-xl shadow p-4"
+                >
+
+                    <h2 class="font-bold text-lg mb-4">
+                        آخر الفواتير
+                    </h2>
+
+
+                    <table class="w-full">
+
+                        <thead>
+
+                            <tr class="border-b">
+
+                                <th class="text-right py-2">
+                                    #
+                                </th>
+
+                                <th class="text-right py-2">
+                                    الإجمالي
+                                </th>
+
+                                <th class="text-right py-2">
+                                    الربح
+                                </th>
+
+                                <th class="text-right py-2">
+                                    التاريخ
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr
+                                v-for="sale in dashboard.recent_sales"
+                                :key="sale.id"
+                                class="border-b"
+                            >
+
+                                <td class="py-2">
+                                    {{ sale.id }}
+                                </td>
+
+                                <td class="py-2">
+                                    {{ formatNumber(sale.total_amount) }}
+                                </td>
+
+                                <td class="py-2">
+                                    {{ formatNumber(sale.profit_amount) }}
+                                </td>
+
+                                <td class="py-2">
+                                    {{ sale.created_at }}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </template>
+
+    </div>
+
+</div>
+
+
+<script
+    type="module"
+    src="./src/js/pages/analytics.js"
+></script>
+
+</body>
+</html>

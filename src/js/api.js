@@ -1,0 +1,1 @@
+const api = "https://pharmaflow-api-1.1.0-beta-main.test/api";
