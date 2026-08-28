@@ -25,7 +25,7 @@ setup() {
     const topProfitable = ref([]);
 
     const renderChart = async () => {
-        const res = await axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/admin/analytics-data');
+        const res = await axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/admin/analytics-data');
         const ctx = document.getElementById('salesChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
