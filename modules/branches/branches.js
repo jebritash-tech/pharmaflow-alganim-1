@@ -98,7 +98,7 @@ const  Branches = {
         const isEditing = ref(false);
 
         const fetchBranches = async () => {
-            const res = await axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/branches');
+            const res = await axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches');
             branches.value = res.data;
         };
 
@@ -106,9 +106,9 @@ const  Branches = {
             errors.value = {}; // مسح الأخطاء السابقة
             try {
                 if (isEditing.value) {
-                    await axios.put(`https://pharmaflow-api-1.1.0-beta-main.test/api/branches/${form.value.id}`, form.value);
+                    await axios.put(`https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches/${form.value.id}`, form.value);
                 } else {
-                    await axios.post('https://pharmaflow-api-1.1.0-beta-main.test/api/branches', form.value);
+                    await axios.post('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches', form.value);
                 }
                 resetForm();
                 fetchBranches();
@@ -136,7 +136,7 @@ const  Branches = {
 
         const deleteBranch = async (id) => {
             if(confirm('هل أنت متأكد؟')) {
-                await axios.delete(`https://pharmaflow-api-1.1.0-beta-main.test/api/branches/${id}`);
+                await axios.delete(`https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches/${id}`);
                 fetchBranches();
             }
         };
