@@ -178,7 +178,7 @@ const form = ref({
 
 const load = async () => {
     try {
-        const res = await axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/expenses');
+        const res = await axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/expenses');
         expenses.value = res.data.data || res.data;
     } catch (e) {
         console.error('Failed to load expenses', e);
@@ -197,7 +197,7 @@ const submitExpense = async () => {
     }
 
     try {
-        await axios.post('https://pharmaflow-api-1.1.0-beta-main.test/api/expenses', {
+        await axios.post('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/expenses', {
             title: form.value.title,
             amount: form.value.amount,
             notes: form.value.notes
