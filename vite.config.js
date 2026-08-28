@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
-
+import vue from '@vitejs/plugin-vue'
 export default defineConfig({
     base: '/pharmaflow-alganim-1/',
     //base: '/',
