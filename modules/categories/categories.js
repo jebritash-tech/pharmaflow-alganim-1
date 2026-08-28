@@ -112,7 +112,7 @@ template: `
         const isEditing = ref(false);
 
         const fetchCategories = async () => {
-            const res = await axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/categories');
+            const res = await axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/categories');
             categories.value = res.data;
         };
 
@@ -120,9 +120,9 @@ template: `
             errors.value = {}; // مسح الأخطاء السابقة
             try {
                 if (isEditing.value) {
-                    await axios.put('https://pharmaflow-api-1.1.0-beta-main.test/api/categories/' + form.value.id, form.value);
+                    await axios.put('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/categories/' + form.value.id, form.value);
                 } else {
-                    await axios.post('https://pharmaflow-api-1.1.0-beta-main.test/api/categories', form.value);
+                    await axios.post('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/categories', form.value);
                 }
                 resetForm();
                 fetchCategories();
@@ -150,7 +150,7 @@ template: `
 
         const deleteCategory = async (id) => {
             if (confirm('تنبيه: سيتم حذف هذا التصنيف. هل أنت متأكد؟')) {
-                await axios.delete('https://pharmaflow-api-1.1.0-beta-main.test/api/categories/' + id);
+                await axios.delete('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/categories/' + id);
                 fetchCategories();
             }
         };
