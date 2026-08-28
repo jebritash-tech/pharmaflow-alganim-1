@@ -3,8 +3,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-    //base: '/pharmaflow-frontend-2.0.0-stable-altelal/',
-    base: '/',
+    base: '/pharmaflow-alganim-1/',
+    //base: '/',
 
     resolve: {
         alias: {
