@@ -298,7 +298,7 @@ template: `
         const pageAllBatches = ref(1);
 
         const fetchOverview = async () => {
-            const res = await axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/admin/overview-stats', { params: { branch_id: selectedBranch.value } });
+            const res = await axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/admin/overview-stats', { params: { branch_id: selectedBranch.value } });
             stats.value = res.data;
         };
 
@@ -322,7 +322,7 @@ template: `
         };
 
         onMounted(() => {
-            axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/branches').then(res => branches.value = res.data);
+            axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches').then(res => branches.value = res.data);
             fetchOverview();
         });
 
