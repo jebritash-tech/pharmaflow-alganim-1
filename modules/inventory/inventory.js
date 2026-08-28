@@ -454,7 +454,7 @@ setup(){
 
     const loadBranches = async () => {
         try {
-            const res = await axios.get('https://pharmaflow-api-1.1.0-beta-main.test/api/branches'); 
+            const res = await axios.get('https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches'); 
             branches.value = res.data;
         } catch (e) {
             console.error("Failed to load branches");
