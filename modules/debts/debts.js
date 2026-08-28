@@ -375,7 +375,7 @@ const newDebtForm = ref({
 const load = async (page = 1) => {
     try {
         // Fallback directly to axios query parameter to ensure pagination page triggers smoothly
-        const res = await axios.get(`https://pharmaflow-api-1.1.0-beta-main.test/api/debts?page=${page}`);
+        const res = await axios.get(`https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/debts?page=${page}`);
         
         debts.value = res.data.data || [];
         
@@ -385,7 +385,7 @@ const load = async (page = 1) => {
             total: res.data.total || 0
         };
 
-        const branchRes = await axios.get("https://pharmaflow-api-1.1.0-beta-main.test/api/branches");
+        const branchRes = await axios.get("https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/branches");
         
         if (Array.isArray(branchRes.data)) {
             branches.value = branchRes.data;
@@ -400,7 +400,7 @@ const load = async (page = 1) => {
 };
 
 const selectDebt = async (debt) => {
-    const res = await axios.get(`https://pharmaflow-api-1.1.0-beta-main.test/api/debts/${debt.id}`);
+    const res = await axios.get(`https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/debts/${debt.id}`);
     selectedDebt.value = res.data;
 };
 
@@ -426,7 +426,7 @@ const submitCreateDebt = async () => {
     }
 
     try {
-        await axios.post("https://pharmaflow-api-1.1.0-beta-main.test/api/debts", newDebtForm.value);
+        await axios.post("https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/debts", newDebtForm.value);
         showCreateModal.value = false;
         alert('تم تسجيل الدين الجديد بنجاح');
         await load(pagination.value.currentPage);
@@ -448,7 +448,7 @@ const submitPayment = async () => {
     }
 
     try {
-        await axios.post(`https://pharmaflow-api-1.1.0-beta-main.test/api/debts/${activeDebt.value.id}/payments`, {
+        await axios.post(`https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/debts/${activeDebt.value.id}/payments`, {
             amount: paymentAmount.value
         });
 
@@ -457,7 +457,7 @@ const submitPayment = async () => {
 
         await load(pagination.value.currentPage);
         if (selectedDebt.value && selectedDebt.value.id === activeDebt.value.id) {
-            const res = await axios.get(`https://pharmaflow-api-1.1.0-beta-main.test/api/debts/${activeDebt.value.id}`);
+            const res = await axios.get(`https://pharmaflow-api-2-0-0-stable-alganim.onrender.com/api/debts/${activeDebt.value.id}`);
             selectedDebt.value = res.data;
         }
     } catch (e) {
