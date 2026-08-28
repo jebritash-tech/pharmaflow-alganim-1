@@ -38,7 +38,7 @@ jobs:
         run: npm ci
 
       - name: Build application
-        run: npm run build
+        run: npm run build -- --base=/pharmaflow-alganim-1/
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
